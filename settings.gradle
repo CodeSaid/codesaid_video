@@ -1,2 +1,2 @@
-include ':app', ':lib_navannotation', ':lib_navcompiler'
+include ':app', ':lib_navannotation', ':lib_navcompiler', ':lib_network'
 rootProject.name='codesaid_video'
