@@ -15,7 +15,6 @@ import androidx.room.Update;
  */
 @Dao
 public interface CacheDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long save(Cache cache);
 
@@ -43,4 +42,3 @@ public interface CacheDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     int update(Cache cache);
 }
-

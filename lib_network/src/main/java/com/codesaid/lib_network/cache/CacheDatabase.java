@@ -13,22 +13,19 @@ import com.codesaid.lib_base.AppGlobals;
  * desc:
  */
 
-@Database(entities = {Cache.class}, version = 1, exportSchema = true)
+@Database(entities = {Cache.class}, version = 1)
+//数据读取、存储时数据转换器,比如将写入时将Date转换成Long存储，读取时把Long转换Date返回
+//@TypeConverters(DateConverter.class)
 public abstract class CacheDatabase extends RoomDatabase {
-
-    private static final CacheDatabase DATABASE;
+    private static final CacheDatabase database;
 
     static {
-
-        /**
-         * 该方法表示创建一个内存数据库，即数据只存在于内存当中，当 app进程被 kill。数据随之丢失
-         */
-        ////Room.inMemoryDatabaseBuilder();
-
-        DATABASE = Room
-                .databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "codesaid_video_cache")
+        //创建一个内存数据库
+        //但是这种数据库的数据只存在于内存中，也就是进程被杀之后，数据随之丢失
+        //Room.inMemoryDatabaseBuilder()
+        database = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "ppjoke_cache")
                 //是否允许在主线程进行查询
-                //.allowMainThreadQueries()
+                .allowMainThreadQueries()
                 //数据库创建和打开后的回调
                 //.addCallback()
                 //设置查询的线程池
@@ -42,9 +39,20 @@ public abstract class CacheDatabase extends RoomDatabase {
                 //.fallbackToDestructiveMigrationFrom()
                 // .addMigrations(CacheDatabase.sMigration)
                 .build();
+
     }
 
+    public abstract CacheDao getCache();
+
     public static CacheDatabase get() {
-        return DATABASE;
+        return database;
     }
+
+    //    static Migration sMigration = new Migration(1, 3) {
+    //        @Override
+    //        public void migrate(@NonNull SupportSQLiteDatabase database) {
+    //            database.execSQL("alter table teacher rename to student");
+    //            database.execSQL("alter table teacher add column teacher_age INTEGER NOT NULL default 0");
+    //        }
+    //    };
 }
