@@ -1,31 +1,63 @@
 package com.codesaid;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.MenuItem;
 
+import com.alibaba.fastjson.JSONObject;
+import com.codesaid.lib_network.ApiResponse;
+import com.codesaid.lib_network.callback.JsonCallback;
+import com.codesaid.lib_network.request.GetRequest;
+import com.codesaid.utils.NavGraphBuilder;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+/**
+ * @author codesaid
+ */
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+    private NavController mNavController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+        mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        navView.setOnNavigationItemSelectedListener(this);
+
+        NavGraphBuilder.build(mNavController, this, fragment.getId());
+
+        GetRequest<JSONObject> request = new GetRequest<>("www.imooc.com");
+        request.excute();
+
+        request.excute(new JsonCallback<JSONObject>() {
+            @Override
+            public void onSuccess(ApiResponse<JSONObject> response) {
+                super.onSuccess(response);
+            }
+        });
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        mNavController.navigate(menuItem.getItemId());
+        return !TextUtils.isEmpty(menuItem.getTitle());
+    }
 }

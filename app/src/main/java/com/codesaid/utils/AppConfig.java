@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.codesaid.model.BottomBar;
 import com.codesaid.model.Destination;
 
 import java.io.BufferedReader;
@@ -17,12 +18,15 @@ import java.util.HashMap;
  * On :2020-05-04 13:37
  * Package Name: com.codesaid.utils
  * desc:
+ *
  * @author codesaid
  */
 public class AppConfig {
 
 
     private static HashMap<String, Destination> sDesConfig;
+
+    private static BottomBar sBottomBar;
 
     public static HashMap<String, Destination> getDesConfig() {
         if (sDesConfig == null) {
@@ -32,6 +36,15 @@ public class AppConfig {
         }
 
         return sDesConfig;
+    }
+
+    public static BottomBar getBottomBar() {
+        if (sBottomBar == null) {
+            String content = parseFile("main_tabs_config.json");
+            sBottomBar = JSON.parseObject(content, BottomBar.class);
+        }
+
+        return sBottomBar;
     }
 
     /**

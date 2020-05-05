@@ -2,6 +2,7 @@ package com.codesaid.utils;
 
 import android.content.ComponentName;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -9,6 +10,7 @@ import androidx.navigation.NavGraphNavigator;
 import androidx.navigation.NavigatorProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import com.codesaid.navigator.FixFragmentNavigator;
 import com.codesaid.model.Destination;
 
 import java.util.HashMap;
@@ -21,10 +23,15 @@ import java.util.HashMap;
  */
 public class NavGraphBuilder {
 
-    public static void build(NavController controller) {
+    public static void build(NavController controller, FragmentActivity activity, int containerId) {
         NavigatorProvider provider = controller.getNavigatorProvider();
 
-        FragmentNavigator fragmentNavigator = provider.getNavigator(FragmentNavigator.class);
+        //FragmentNavigator fragmentNavigator = provider.getNavigator(FragmentNavigator.class);
+        FixFragmentNavigator fragmentNavigator =
+                new FixFragmentNavigator(activity, activity.getSupportFragmentManager(), containerId);
+
+        provider.addNavigator(fragmentNavigator);
+
         ActivityNavigator activityNavigator = provider.getNavigator(ActivityNavigator.class);
 
         NavGraph navGraph = new NavGraph(new NavGraphNavigator(provider));
