@@ -14,14 +14,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 /**
  * @author codesaid
@@ -45,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         NavGraphBuilder.build(mNavController, this, fragment.getId());
 
         GetRequest<JSONObject> request = new GetRequest<>("www.imooc.com");
-        request.excute();
+        request.execute();
 
-        request.excute(new JsonCallback<JSONObject>() {
+        request.execute(new JsonCallback<JSONObject>() {
             @Override
             public void onSuccess(ApiResponse<JSONObject> response) {
                 super.onSuccess(response);

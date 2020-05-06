@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.codesaid.lib_base.AppGlobals;
 import com.codesaid.model.BottomBar;
 import com.codesaid.model.Destination;
 
