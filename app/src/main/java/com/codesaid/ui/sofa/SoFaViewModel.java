@@ -1,16 +1,16 @@
-package com.codesaid.ui.notifications;
+package com.codesaid.ui.sofa;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class SoFaViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public SoFaViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is sofa fragment");
     }
 
     public LiveData<String> getText() {

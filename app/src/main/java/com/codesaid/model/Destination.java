@@ -13,7 +13,7 @@ public class Destination {
      * isFragment : true
      * asStarter : false
      * needLogin : false
-     * className : com.codesaid.ui.dashboard.DashboardFragment
+     * className : com.codesaid.ui.dashboard.SoFaFragment
      * pageUrl : main/tabs/dash
      * id : 466485797
      */

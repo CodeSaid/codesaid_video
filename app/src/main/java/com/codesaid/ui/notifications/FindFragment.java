@@ -17,18 +17,18 @@ import com.codesaid.R;
 import com.codesaid.lib_navannotation.FragmentDestination;
 
 @FragmentDestination(pageUrl = "main/tabs/find",asStarter = false)
-public class NotificationsFragment extends Fragment {
+public class FindFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private FindViewModel mFindViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        Log.e("NotificationsFragment", "onCreateView()");
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
+        Log.e("FindFragment", "onCreateView()");
+        mFindViewModel =
+                ViewModelProviders.of(this).get(FindViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_find, container, false);
+        final TextView textView = root.findViewById(R.id.text_find);
+        mFindViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
