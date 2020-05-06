@@ -1,4 +1,4 @@
-package com.codesaid.utils;
+package com.codesaid.lib_base;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -28,7 +28,7 @@ public class AppGlobals {
             try {
                 Method method = Class.forName("android.app.ActivityThread")
                         .getDeclaredMethod("currentApplication");
-                sApplication = (Application) method.invoke(null, null);
+                sApplication = (Application) method.invoke(null, (Object[]) null);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
