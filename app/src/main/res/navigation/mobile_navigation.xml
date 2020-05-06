@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.codesaid.ui.notifications.FindFragment"
+        android:name="com.codesaid.ui.find.FindFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_find" />
 </navigation>
