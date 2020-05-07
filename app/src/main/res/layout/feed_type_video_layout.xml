@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="feed"
+            type="Feed" />
+
+        <import type="com.codesaid.model.Feed" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_10">
+
+        <include
+            layout="@layout/feed_author_layout"
+            app:user="@{feed.author}" />
+
+        <include
+            layout="@layout/feed_text_layout"
+            app:feedText="@{feed.feeds_text}" />
+
+        <!--   视频区域     -->
+
+
+        <include
+            layout="@layout/feed_tag_layout"
+            app:tagText="@{feed.activityText}" />
+
+        <include
+            layout="@layout/feed_top_comment_layout"
+            app:comment="@{feed.topComment}" />
+
+        <include
+            layout="@layout/feed_interaction_layout"
+            app:feed="@{feed}" />
+
+    </LinearLayout>
+</layout>
