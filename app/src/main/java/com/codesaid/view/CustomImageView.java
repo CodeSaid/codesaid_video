@@ -17,6 +17,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.codesaid.lib_base.PixUtils;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * Created By codesaid
  * On :2020-05-06 16:03
@@ -105,5 +107,17 @@ public class CustomImageView extends AppCompatImageView {
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(finalWidth, finalHeight);
         params.leftMargin = height > width ? PixUtils.dp2pix(marginLeft) : 0;
         setLayoutParams(params);
+    }
+
+    public void setBlurImageUrl(String coverUrl, int radius) {
+        Glide.with(this).load(coverUrl).override(50)
+                .transform(new BlurTransformation())
+                .dontAnimate()
+                .into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        setBackground(resource);
+                    }
+                });
     }
 }
