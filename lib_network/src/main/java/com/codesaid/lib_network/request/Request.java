@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -58,6 +60,7 @@ public abstract class Request<T, R extends Request> implements Cloneable{
     private int mCacheStrategy;
 
     @IntDef({CACHE_ONLY, CACHE_FIRST, NET_ONLY, NET_CACHE})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface CacheStrategy {
 
     }
