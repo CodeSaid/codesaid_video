@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-class Ugc implements Serializable {
+public class Ugc implements Serializable {
 
     /**
      * likeCount : 153

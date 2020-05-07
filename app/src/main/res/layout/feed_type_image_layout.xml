@@ -15,8 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/dp_10"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_10">
 
         <include
             layout="@layout/feed_author_layout"
@@ -25,6 +25,13 @@
         <include
             layout="@layout/feed_text_layout"
             app:feedText="@{feed.feeds_text}" />
+
+        <!--   图片区域     -->
+        <com.codesaid.view.CustomImageView
+            android:id="@+id/feed_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10" />
 
         <include
             layout="@layout/feed_tag_layout"

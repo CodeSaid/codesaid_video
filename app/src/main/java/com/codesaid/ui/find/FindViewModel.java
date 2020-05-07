@@ -1,4 +1,4 @@
-package com.codesaid.ui.notifications;
+package com.codesaid.ui.find;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

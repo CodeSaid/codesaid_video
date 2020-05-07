@@ -1,4 +1,4 @@
-package com.codesaid.ui.notifications;
+package com.codesaid.ui.find;
 
 import android.os.Bundle;
 import android.util.Log;
