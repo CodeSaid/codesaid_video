@@ -5,33 +5,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.codesaid.view.CustomImageView
+    <com.codesaid.view.PPImageView
         android:id="@+id/blur_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:background="@color/color_theme_10" />
+        android:transitionName="blur_image"
+        tools:background="@color/color_theme_10">
 
-    <!--  播放视频的 view  代码中动态添加-->
-    <com.codesaid.view.CustomVideoView
-        android:id="@+id/player_video_view"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:layout_height="wrap_content" />
+    </com.codesaid.view.PPImageView>
 
-    <com.codesaid.view.CustomImageView
+
+    <!--    真正能够播放展示视频画面的view  会动态的添加到这里-->
+
+
+    <com.codesaid.view.PPImageView
         android:id="@+id/cover"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:transitionName="cover" />
+
 
     <ImageView
         android:id="@+id/play_btn"
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
         android:layout_gravity="center"
-        android:src="@drawable/icon_video_play" />
+        android:src="@drawable/icon_video_play"
+        android:transitionName="play_btn" />
 
-    <!--  底部 进度条 代码中动态添加 -->
 
+    <!--    视频播放时的底部进度条-->
 
     <ProgressBar
         android:id="@+id/buffer_view"
@@ -39,7 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateTint="@color/color_theme_10"
-        android:visibility="gone" />
+        android:indeterminateTint="@color/color_theme"
+        android:transitionName="buffer_view"
+        android:visibility="gone">
 
+    </ProgressBar>
 </merge>

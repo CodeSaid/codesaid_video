@@ -19,7 +19,7 @@
         android:paddingLeft="@dimen/dp_16"
         android:paddingRight="@dimen/dp_16">
 
-        <com.codesaid.view.CustomImageView
+        <com.codesaid.view.PPImageView
             android:id="@+id/avatar"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"

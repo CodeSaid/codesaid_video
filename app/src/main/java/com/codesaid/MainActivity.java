@@ -37,16 +37,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         navView.setOnNavigationItemSelectedListener(this);
 
         NavGraphBuilder.build(mNavController, this, fragment.getId());
-
-        GetRequest<JSONObject> request = new GetRequest<>("www.imooc.com");
-        request.execute();
-
-        request.execute(new JsonCallback<JSONObject>() {
-            @Override
-            public void onSuccess(ApiResponse<JSONObject> response) {
-                super.onSuccess(response);
-            }
-        });
     }
 
     @Override

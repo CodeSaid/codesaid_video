@@ -1,5 +1,7 @@
 package com.codesaid.model;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 
 /**
@@ -82,5 +84,18 @@ public class Ugc implements Serializable {
 
     public void setHasDissed(boolean hasDissed) {
         this.hasDissed = hasDissed;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null || !(obj instanceof Ugc))
+            return false;
+        Ugc newUgc = (Ugc) obj;
+        return likeCount == newUgc.likeCount
+                && shareCount == newUgc.shareCount
+                && commentCount == newUgc.commentCount
+                && hasFavorite == newUgc.hasFavorite
+                && hasLiked == newUgc.hasLiked
+                && hasdiss == newUgc.hasdiss;
     }
 }

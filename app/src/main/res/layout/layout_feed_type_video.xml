@@ -14,9 +14,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
         android:orientation="vertical"
         android:paddingTop="@dimen/dp_10">
+
 
         <include
             layout="@layout/feed_author_layout"
@@ -26,7 +28,13 @@
             layout="@layout/feed_text_layout"
             app:feedText="@{feed.feeds_text}" />
 
-        <!--   视频区域     -->
+
+        <!--   视频区域-->
+        <com.codesaid.view.ListPlayerView
+            android:id="@+id/list_player_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10" />
 
 
         <include
@@ -38,8 +46,8 @@
             app:comment="@{feed.topComment}" />
 
         <include
+            android:id="@+id/interaction_binding"
             layout="@layout/feed_interaction_layout"
             app:feed="@{feed}" />
-
     </LinearLayout>
 </layout>

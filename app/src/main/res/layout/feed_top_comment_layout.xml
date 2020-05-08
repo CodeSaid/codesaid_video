@@ -21,10 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/sp_16"
-        android:background="@color/color_gray2"
+        android:background="@color/color_gray"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
-        android:paddingBottom="@dimen/dp_10">
+        android:paddingBottom="@dimen/dp_10"
+        android:visibility="@{comment==null?View.GONE:View.VISIBLE}">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -44,7 +45,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:orientation="horizontal">
 
-                <com.codesaid.view.CustomImageView
+                <com.codesaid.view.PPImageView
                     android:id="@+id/avatar"
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
@@ -71,6 +72,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:text="@{comment.ugc.likeCount>0?StringConvert.convertFeedUgc(comment.ugc.likeCount):null}"
                     android:textColor="@{comment.ugc.hasLiked?@color/color_theme:@color/color_3d3}"
                     android:textSize="@dimen/sp_12"
@@ -79,8 +81,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_4"
-                    android:padding="@dimen/dp_2"
+                    android:layout_marginLeft="@dimen/dp_2"
                     android:src="@{comment.ugc.hasLiked?@drawable/icon_cell_liked:@drawable/icon_cell_like}"
                     tools:src="@drawable/icon_cell_liked" />
 
@@ -103,13 +104,15 @@
             <FrameLayout
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/dp_10">
+                android:layout_marginTop="@dimen/dp_10"
+                android:visibility="@{TextUtils.isEmpty(comment.imageUrl)?View.GONE:View.VISIBLE}">
 
-                <com.codesaid.view.CustomImageView
+                <com.codesaid.view.PPImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="@color/color_theme_10"
+                    android:visibility="@{TextUtils.isEmpty(comment.imageUrl)?View.GONE:View.VISIBLE}"
                     app:image_url="@{comment.imageUrl}"
                     app:isCircle="@{false}"
                     tools:src="@mipmap/ic_launcher" />
@@ -118,7 +121,7 @@
                     android:layout_width="@dimen/dp_20"
                     android:layout_height="@dimen/dp_20"
                     android:layout_gravity="center"
-                    android:visibility="@{comment.commentType==2?View.VISIBLE:View.GONE}"
+                    android:visibility="@{TextUtils.isEmpty(comment.videoUrl)?View.VISIBLE:View.GONE}"
                     tools:src="@drawable/icon_video_play" />
 
             </FrameLayout>

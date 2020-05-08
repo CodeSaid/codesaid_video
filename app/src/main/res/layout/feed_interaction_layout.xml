@@ -13,6 +13,8 @@
 
         <import type="com.codesaid.utils.StringConvert" />
 
+        <import type="android.content.Context" />
+
     </data>
 
     <LinearLayout
@@ -21,6 +23,7 @@
         android:orientation="horizontal"
         android:paddingLeft="@dimen/dp_16"
         android:paddingRight="@dimen/dp_16">
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -58,6 +61,7 @@
             app:iconTint="@{feed.ugc.hasdiss?@color/color_theme:@color/color_3d3}"
             tools:icon="@drawable/icon_cell_diss"
             tools:iconTint="@color/color_3d3"
+            tools:text="1000"
             tools:textColor="@color/color_3d3" />
 
 
