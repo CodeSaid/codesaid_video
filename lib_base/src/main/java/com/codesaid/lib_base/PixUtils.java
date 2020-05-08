@@ -15,7 +15,7 @@ public class PixUtils {
         return (int) (displayMetrics.density * dpValue + 0.5f);
     }
 
-    public static int getScreenWidht() {
+    public static int getScreenWidth() {
         DisplayMetrics displayMetrics = AppGlobals.getApplication().getResources().getDisplayMetrics();
         return displayMetrics.widthPixels;
     }

@@ -44,7 +44,7 @@ public class EmptyView extends LinearLayout {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER);
 
-        mEmptyView = findViewById(R.id.empty_view);
+        mEmptyView = findViewById(R.id.iv_empty_view);
         mEmptyText = findViewById(R.id.empty_text);
         mBtnEmpty = findViewById(R.id.btn_empty);
     }
