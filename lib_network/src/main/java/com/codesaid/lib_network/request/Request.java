@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.arch.core.executor.ArchTaskExecutor;
 
 import com.codesaid.lib_network.ApiResponse;
@@ -37,7 +38,7 @@ import okhttp3.Response;
  * desc:
  */
 @SuppressWarnings("unchecked")
-public abstract class Request<T, R extends Request> implements Cloneable{
+public abstract class Request<T, R extends Request> implements Cloneable {
 
     private static final String TAG = "Request";
     protected String mUrl;
@@ -74,18 +75,22 @@ public abstract class Request<T, R extends Request> implements Cloneable{
         return (R) this;
     }
 
-    public R addHeaders(HashMap<String, String> headers) {
-        headers.putAll(headers);
-        return (R) this;
-    }
-
     public R addParam(String key, Object value) {
 
+        if (value == null) {
+            return (R) this;
+        }
+
         try {
-            Field field = value.getClass().getField("TYPE");
-            Class clazz = (Class) field.get(null);
-            if (clazz.isPrimitive()) {
+            //int byte char short long double float boolean 和他们的包装类型，但是除了 String.class 所以要额外判断
+            if (value.getClass() == String.class) {
                 params.put(key, value);
+            } else {
+                Field field = value.getClass().getField("TYPE");
+                Class clazz = (Class) field.get(null);
+                if (clazz.isPrimitive()) {
+                    params.put(key, value);
+                }
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
@@ -123,18 +128,28 @@ public abstract class Request<T, R extends Request> implements Cloneable{
      */
     public ApiResponse<T> execute() {
 
+        if (mType == null) {
+            throw new RuntimeException("同步方法,response 返回值 类型必须设置");
+        }
+
         if (mCacheStrategy == CACHE_ONLY) {
             return readCache();
         }
 
-        try {
-            Response response = getCall().execute();
-            ApiResponse<T> apiResponse = parseResponse(response, null);
-            return apiResponse;
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (mCacheStrategy != CACHE_ONLY) {
+            ApiResponse<T> result = null;
+            try {
+                Response response = getCall().execute();
+                result = parseResponse(response, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+                if (result == null) {
+                    result = new ApiResponse<>();
+                    result.message = e.getMessage();
+                }
+            }
+            return result;
         }
-
         return null;
     }
 
@@ -151,7 +166,7 @@ public abstract class Request<T, R extends Request> implements Cloneable{
                 @Override
                 public void run() {
                     ApiResponse<T> response = readCache();
-                    if (callback != null) {
+                    if (callback != null && response.body != null) {
                         callback.onCacheSuccess(response);
                     }
                 }
@@ -264,5 +279,11 @@ public abstract class Request<T, R extends Request> implements Cloneable{
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             builder.addHeader(entry.getKey(), entry.getValue());
         }
+    }
+
+    @NonNull
+    @Override
+    public Request clone() throws CloneNotSupportedException {
+        return (Request<T, R>) super.clone();
     }
 }

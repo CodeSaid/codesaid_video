@@ -1,5 +1,8 @@
 package com.codesaid.lib_network;
 
+import com.codesaid.lib_network.request.GetRequest;
+import com.codesaid.lib_network.request.PostRequest;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -42,6 +45,7 @@ public class ApiService {
                 .addInterceptor(interceptor)
                 .build();
 
+        //http 证书问题
         TrustManager[] trustManagers = new TrustManager[]{new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -83,5 +87,13 @@ public class ApiService {
         }
 
         sConvert = convert;
+    }
+
+    public static <T> GetRequest<T> get(String url) {
+        return new GetRequest<>(sBaseUrl + url);
+    }
+
+    public static <T> PostRequest<T> post(String url) {
+        return new PostRequest<>(sBaseUrl + url);
     }
 }
