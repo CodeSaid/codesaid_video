@@ -73,22 +73,20 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>>
         decoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
         mRecyclerView.addItemDecoration(decoration);
 
-        afterCreateView();
+        genericViewModel();
 
         return mBinding.getRoot();
     }
 
-    protected abstract void afterCreateView();
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void genericViewModel() {
         ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
         Type[] arguments = type.getActualTypeArguments();
         if (arguments.length > 1) {
             Type argument = arguments[1];
             Class aClass = ((Class) argument).asSubclass(AbsViewModel.class);
             mViewModel = (M) ViewModelProviders.of(this).get(aClass);
+
+            //触发页面初始化数据加载的逻辑
             mViewModel.getLiveData().observe(this, new Observer<PagedList<T>>() {
                 @Override
                 public void onChanged(PagedList<T> list) {
@@ -96,6 +94,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>>
                 }
             });
 
+            //监听分页时有无更多数据,以决定是否关闭上拉加载的动画
             mViewModel.getBoundaryPageData().observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean hasData) {
@@ -106,6 +105,8 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>>
     }
 
     public void submitList(PagedList<T> list) {
+        //只有当新数据集合大于0 的时候，才调用adapter.submitList
+        //否则可能会出现 页面----有数据----->被清空-----空布局
         if (list.size() > 0) {
             mAdapter.submitList(list);
         }

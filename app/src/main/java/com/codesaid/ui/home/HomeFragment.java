@@ -1,6 +1,10 @@
 package com.codesaid.ui.home;
 
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
@@ -18,7 +22,8 @@ import java.util.List;
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
-    protected void afterCreateView() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mViewModel.getCacheLiveData().observe(this, new Observer<PagedList<Feed>>() {
             @Override
             public void onChanged(PagedList<Feed> feeds) {
