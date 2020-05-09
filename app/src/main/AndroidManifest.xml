@@ -12,18 +12,27 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_LOGS"
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:allowBackup="true"
         android:name=".MyApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <!--        这是是QQ快捷登录SDK 里面包含但没用的 apache的类，需要在这里通过uses-library去除掉 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -34,6 +43,28 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.publish.CaptureActivity" />
+
+
+        <!-- 注册SDKActivity -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent101794421" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ui.login.LoginActivity" />
+
     </application>
 
 </manifest>
