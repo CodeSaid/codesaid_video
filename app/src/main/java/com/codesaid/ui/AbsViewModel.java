@@ -21,7 +21,7 @@ public abstract class AbsViewModel<T> extends ViewModel {
     private final LiveData<PagedList<T>> mLiveData;
 
     private MutableLiveData<Boolean> boundaryPageData = new MutableLiveData<>();
-    private final PagedList.Config mConfig;
+    protected PagedList.Config mConfig;
 
     @SuppressWarnings("unchecked")
     public AbsViewModel() {

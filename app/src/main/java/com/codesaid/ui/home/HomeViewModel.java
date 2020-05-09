@@ -3,8 +3,11 @@ package com.codesaid.ui.home;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.executor.ArchTaskExecutor;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 import androidx.paging.ItemKeyedDataSource;
+import androidx.paging.PagedList;
 
 import com.alibaba.fastjson.TypeReference;
 import com.codesaid.lib_network.ApiResponse;
@@ -13,20 +16,29 @@ import com.codesaid.lib_network.callback.JsonCallback;
 import com.codesaid.lib_network.request.Request;
 import com.codesaid.model.Feed;
 import com.codesaid.ui.AbsViewModel;
+import com.codesaid.ui.MutableDataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HomeViewModel extends AbsViewModel<Feed> {
+
+    private MutableLiveData<PagedList<Feed>> mCacheLiveData = new MutableLiveData<>();
 
     private volatile boolean withCache = true;
     private String TAG = "HomeViewModel";
 
+    private AtomicBoolean loadAfter = new AtomicBoolean(false);
+
     @Override
     public DataSource createDataSource() {
-
         return mDataSource;
+    }
+
+    public MutableLiveData<PagedList<Feed>> getCacheLiveData() {
+        return mCacheLiveData;
     }
 
     ItemKeyedDataSource<Integer, Feed> mDataSource = new ItemKeyedDataSource<Integer, Feed>() {
@@ -69,6 +81,11 @@ public class HomeViewModel extends AbsViewModel<Feed> {
     };
 
     private void loadData(int key, ItemKeyedDataSource.LoadCallback<Feed> callback) {
+
+        if (key > 0) {
+            loadAfter.set(true);
+        }
+
         //feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
                 .addParam("feedType", null)
@@ -86,6 +103,11 @@ public class HomeViewModel extends AbsViewModel<Feed> {
                 public void onCacheSuccess(ApiResponse<List<Feed>> response) {
                     Log.e(TAG, "onCacheSuccess: " + response.body.size());
                     List<Feed> body = response.body;
+                    MutableDataSource dataSource = new MutableDataSource<Integer, Feed>();
+                    dataSource.mList.addAll(response.body);
+
+                    PagedList pagedList = dataSource.buildNewPageList(mConfig);
+                    mCacheLiveData.postValue(pagedList);
                 }
             });
         }
@@ -101,9 +123,24 @@ public class HomeViewModel extends AbsViewModel<Feed> {
             if (key > 0) {
                 // 通过 liveData 发送数据 告诉 UI 是否应该主动关闭上拉加载出现的分页动画
                 getBoundaryPageData().postValue(listData.size() > 0);
+                loadAfter.set(false);
             }
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadAfter(int id, ItemKeyedDataSource.LoadCallback<Feed> callback) {
+
+        if (loadAfter.get()) {
+            callback.onResult(Collections.emptyList());
+            return;
+        }
+        ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                loadData(id, callback);
+            }
+        });
     }
 }

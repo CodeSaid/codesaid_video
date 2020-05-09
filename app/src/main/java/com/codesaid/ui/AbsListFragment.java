@@ -43,7 +43,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>>
     private SmartRefreshLayout mSmartRefreshLayout;
     private EmptyView mEmptyView;
 
-    private PagedListAdapter<T, RecyclerView.ViewHolder> mAdapter;
+    protected PagedListAdapter<T, RecyclerView.ViewHolder> mAdapter;
 
     protected M mViewModel;
 
