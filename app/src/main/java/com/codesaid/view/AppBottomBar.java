@@ -101,7 +101,7 @@ public class AppBottomBar extends BottomNavigationView {
     }
 
     private int getId(String pageUrl) {
-        Destination destination = AppConfig.getDesConfig().get(pageUrl);
+        Destination destination = AppConfig.getDestConfig().get(pageUrl);
         if (destination == null) {
             return -1;
         }

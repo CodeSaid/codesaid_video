@@ -37,7 +37,7 @@ public class NavGraphBuilder {
 
         NavGraph navGraph = new NavGraph(new NavGraphNavigator(provider));
 
-        HashMap<String, Destination> desConfig = AppConfig.getDesConfig();
+        HashMap<String, Destination> desConfig = AppConfig.getDestConfig();
 
         for (Destination value : desConfig.values()) {
             if (value.isFragment()) {

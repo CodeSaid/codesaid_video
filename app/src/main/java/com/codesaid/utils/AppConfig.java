@@ -29,7 +29,7 @@ public class AppConfig {
 
     private static BottomBar sBottomBar;
 
-    public static HashMap<String, Destination> getDesConfig() {
+    public static HashMap<String, Destination> getDestConfig() {
         if (sDesConfig == null) {
             String content = parseFile("destination.json");
             sDesConfig = JSON.parseObject(content, new TypeReference<HashMap<String, Destination>>() {
