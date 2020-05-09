@@ -85,6 +85,7 @@ public class HomeViewModel extends AbsViewModel<Feed> {
                 @Override
                 public void onCacheSuccess(ApiResponse<List<Feed>> response) {
                     Log.e(TAG, "onCacheSuccess: " + response.body.size());
+                    List<Feed> body = response.body;
                 }
             });
         }

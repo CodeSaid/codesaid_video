@@ -28,6 +28,6 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-
+        mViewModel.getDataSource().invalidate();
     }
 }
