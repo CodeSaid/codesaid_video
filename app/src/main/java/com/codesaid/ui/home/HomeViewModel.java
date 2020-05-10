@@ -17,6 +17,7 @@ import com.codesaid.lib_network.request.Request;
 import com.codesaid.model.Feed;
 import com.codesaid.ui.AbsViewModel;
 import com.codesaid.ui.MutableDataSource;
+import com.codesaid.ui.login.UserManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,7 +90,7 @@ public class HomeViewModel extends AbsViewModel<Feed> {
         //feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
                 .addParam("feedType", null)
-                .addParam("userId", 0)
+                .addParam("userId", UserManager.getInstance().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", 10)
                 .responseType(new TypeReference<ArrayList<Feed>>() {

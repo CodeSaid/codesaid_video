@@ -3,6 +3,8 @@ package com.codesaid.model;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import java.io.Serializable;
 
@@ -12,7 +14,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-public class Feed implements Serializable {
+public class Feed extends BaseObservable implements Serializable {
 
     /**
      * id : 364
@@ -51,6 +53,14 @@ public class Feed implements Serializable {
     public User author;
     public Comment topComment;
     public Ugc ugc;
+
+    @Bindable
+    public Ugc getUgc() {
+        if (ugc == null) {
+            ugc = new Ugc();
+        }
+        return ugc;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

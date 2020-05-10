@@ -1,6 +1,10 @@
 package com.codesaid.model;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.codesaid.BR;
 
 import java.io.Serializable;
 
@@ -10,7 +14,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-public class Ugc implements Serializable {
+public class Ugc extends BaseObservable implements Serializable {
 
     /**
      * likeCount : 153
@@ -62,20 +66,40 @@ public class Ugc implements Serializable {
         this.hasFavorite = hasFavorite;
     }
 
+    @Bindable
     public boolean isHasLiked() {
         return hasLiked;
     }
 
     public void setHasLiked(boolean hasLiked) {
+        if (this.hasLiked == hasLiked) {
+            return;
+        }
+        if (hasLiked) {
+            likeCount++;
+            setHasdiss(false);
+        } else {
+            likeCount--;
+        }
         this.hasLiked = hasLiked;
+        notifyPropertyChanged(BR._all);
     }
 
+    @Bindable
     public boolean isHasdiss() {
         return hasdiss;
     }
 
     public void setHasdiss(boolean hasdiss) {
+        if (this.hasdiss == hasdiss) {
+            return;
+        }
+        if (hasdiss) {
+            setHasLiked(false);
+
+        }
         this.hasdiss = hasdiss;
+        notifyPropertyChanged(BR._all);
     }
 
     public boolean isHasDissed() {
