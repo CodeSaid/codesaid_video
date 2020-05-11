@@ -36,13 +36,14 @@ public class ViewHelper {
             @Override
             @TargetApi(21)
             public void getOutline(View view, Outline outline) {
-                int w = view.getWidth(), h = view.getHeight();
-                if (w == 0 || h == 0) {
+                int width = view.getWidth();
+                int height = view.getHeight();
+                if (width == 0 || height == 0) {
                     return;
                 }
 
                 if (radiusSide != RADIUS_ALL) {
-                    int left = 0, top = 0, right = w, bottom = h;
+                    int left = 0, top = 0, right = width, bottom = height;
                     if (radiusSide == RADIUS_LEFT) {
                         right += radius;
                     } else if (radiusSide == RADIUS_TOP) {
@@ -56,7 +57,7 @@ public class ViewHelper {
                     return;
                 }
 
-                int top = 0, bottom = h, left = 0, right = w;
+                int top = 0, bottom = height, left = 0, right = width;
                 if (radius <= 0) {
                     outline.setRect(left, top, right, bottom);
                 } else {
