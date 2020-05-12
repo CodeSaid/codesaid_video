@@ -39,7 +39,7 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>>
 
     private RefreshViewLayoutBinding mBinding;
 
-    private RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
     private SmartRefreshLayout mSmartRefreshLayout;
     private EmptyView mEmptyView;
 

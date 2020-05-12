@@ -10,6 +10,7 @@ import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 
+import com.codesaid.exoplayer.PageListPlayDetector;
 import com.codesaid.lib_navannotation.FragmentDestination;
 import com.codesaid.model.Feed;
 import com.codesaid.ui.AbsListFragment;
@@ -21,6 +22,8 @@ import java.util.List;
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
+    private PageListPlayDetector mPageDetector;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -30,13 +33,30 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
                 mAdapter.submitList(feeds);
             }
         });
+
+        mPageDetector = new PageListPlayDetector(this, mRecyclerView);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public PagedListAdapter getAdapter() {
         String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
-        return new FeedAdapter(getContext(), feedType);
+        return new FeedAdapter(getContext(), feedType) {
+            @Override
+            public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+                super.onViewAttachedToWindow(holder);
+                if (holder.isVideoItem()) {
+                    mPageDetector.addListener(holder.getListPlayerView());
+                }
+
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+                super.onViewDetachedFromWindow(holder);
+                mPageDetector.removeListener(holder.getListPlayerView());
+            }
+        };
     }
 
     @Override
@@ -62,5 +82,17 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         mViewModel.getDataSource().invalidate();
+    }
+
+    @Override
+    public void onPause() {
+        mPageDetector.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        mPageDetector.onResume();
+        super.onResume();
     }
 }

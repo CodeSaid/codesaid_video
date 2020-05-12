@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codesaid.databinding.LayoutFeedTypeImageBinding;
 import com.codesaid.databinding.LayoutFeedTypeVideoBinding;
 import com.codesaid.model.Feed;
+import com.codesaid.view.ListPlayerView;
 
 /**
  * Created By codesaid
@@ -74,6 +75,8 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ViewDataBinding mBinding;
 
+        private ListPlayerView listPlayerView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -94,7 +97,17 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
                 videoBinding.setFeed(item);
                 videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
                 videoBinding.setLifecycleOwner((LifecycleOwner) mContext);
+
+                listPlayerView = videoBinding.listPlayerView;
             }
+        }
+
+        public boolean isVideoItem() {
+            return mBinding instanceof LayoutFeedTypeVideoBinding;
+        }
+
+        public ListPlayerView getListPlayerView() {
+            return listPlayerView;
         }
     }
 }
