@@ -24,6 +24,14 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     private PageListPlayDetector mPageDetector;
 
+    public static HomeFragment newInstance(String feedType) {
+        Bundle args = new Bundle();
+        args.putString("feedType", feedType);
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,13 +94,31 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     public void onPause() {
-        mPageDetector.onPause();
         super.onPause();
+        mPageDetector.onPause();
     }
 
     @Override
     public void onResume() {
-        mPageDetector.onResume();
         super.onResume();
+        if (getParentFragment() != null) {
+            if (getParentFragment().isVisible() && isVisible()) {
+                mPageDetector.onResume();
+            }
+        } else {
+            if (isVisible()) {
+                mPageDetector.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            mPageDetector.onPause();
+        } else {
+            mPageDetector.onResume();
+        }
     }
 }

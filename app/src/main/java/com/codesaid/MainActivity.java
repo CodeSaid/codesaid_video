@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.codesaid.lib_base.util.StatusBar;
 import com.codesaid.model.Destination;
 import com.codesaid.model.User;
 import com.codesaid.ui.login.UserManager;
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.AppTheme);
+        StatusBar.fixSystemBar(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavView = findViewById(R.id.nav_view);
