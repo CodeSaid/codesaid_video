@@ -10,7 +10,7 @@ import androidx.navigation.NavGraphNavigator;
 import androidx.navigation.NavigatorProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
-import com.codesaid.lib_base.AppGlobals;
+import com.codesaid.lib_base.global.AppGlobals;
 import com.codesaid.navigator.FixFragmentNavigator;
 import com.codesaid.model.Destination;
 

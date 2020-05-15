@@ -11,7 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.alibaba.fastjson.JSONObject;
-import com.codesaid.lib_base.AppGlobals;
+import com.codesaid.lib_base.global.AppGlobals;
 import com.codesaid.lib_network.ApiResponse;
 import com.codesaid.lib_network.ApiService;
 import com.codesaid.lib_network.callback.JsonCallback;

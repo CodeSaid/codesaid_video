@@ -17,7 +17,7 @@
             name="fullScreen"
             type="Boolean" />
 
-        <import type="com.codesaid.lib_base.TimeUtils" />
+        <import type="com.codesaid.lib_base.util.TimeUtils" />
 
     </data>
 

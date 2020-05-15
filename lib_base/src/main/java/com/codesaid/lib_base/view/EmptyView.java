@@ -1,4 +1,4 @@
-package com.codesaid.lib_base;
+package com.codesaid.lib_base.view;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -14,6 +14,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.codesaid.lib_base.R;
 import com.google.android.material.button.MaterialButton;
 
 /**

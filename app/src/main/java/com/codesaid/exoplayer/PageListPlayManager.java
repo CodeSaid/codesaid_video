@@ -2,7 +2,7 @@ package com.codesaid.exoplayer;
 
 import android.net.Uri;
 
-import com.codesaid.lib_base.AppGlobals;
+import com.codesaid.lib_base.global.AppGlobals;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;

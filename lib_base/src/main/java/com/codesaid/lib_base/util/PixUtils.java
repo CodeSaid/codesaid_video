@@ -1,6 +1,8 @@
-package com.codesaid.lib_base;
+package com.codesaid.lib_base.util;
 
 import android.util.DisplayMetrics;
+
+import com.codesaid.lib_base.global.AppGlobals;
 
 /**
  * Created By codesaid

@@ -19,7 +19,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.codesaid.lib_base.PixUtils;
+import com.codesaid.lib_base.util.PixUtils;
 import com.codesaid.lib_base.view.ViewHelper;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;

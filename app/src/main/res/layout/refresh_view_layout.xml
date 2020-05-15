@@ -31,7 +31,7 @@
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-        <com.codesaid.lib_base.EmptyView
+        <com.codesaid.lib_base.view.EmptyView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_marginTop="100dp"

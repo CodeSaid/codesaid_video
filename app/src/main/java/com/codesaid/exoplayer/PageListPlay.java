@@ -4,7 +4,7 @@ import android.app.Application;
 import android.view.LayoutInflater;
 
 import com.codesaid.R;
-import com.codesaid.lib_base.AppGlobals;
+import com.codesaid.lib_base.global.AppGlobals;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;

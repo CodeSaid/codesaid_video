@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codesaid.R;
-import com.codesaid.lib_base.PixUtils;
+import com.codesaid.lib_base.util.PixUtils;
 import com.codesaid.lib_base.view.RoundFrameLayout;
 import com.codesaid.lib_base.view.ViewHelper;
 import com.codesaid.view.PPImageView;

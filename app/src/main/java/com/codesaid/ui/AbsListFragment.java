@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codesaid.R;
 import com.codesaid.databinding.RefreshViewLayoutBinding;
-import com.codesaid.lib_base.EmptyView;
+import com.codesaid.lib_base.view.EmptyView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;

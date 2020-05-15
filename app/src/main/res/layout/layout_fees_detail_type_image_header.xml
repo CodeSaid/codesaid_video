@@ -9,7 +9,7 @@
             name="feed"
             type="com.codesaid.model.Feed" />
 
-        <import type="com.codesaid.lib_base.PixUtils" />
+        <import type="com.codesaid.lib_base.util.PixUtils" />
 
     </data>
 

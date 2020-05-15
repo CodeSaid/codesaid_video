@@ -1,4 +1,4 @@
-package com.codesaid.lib_base;
+package com.codesaid.lib_base.global;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
