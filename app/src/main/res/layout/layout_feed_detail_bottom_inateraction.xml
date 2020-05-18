@@ -16,6 +16,8 @@
 
         <import type="com.codesaid.ui.InteractionPresenter" />
 
+        <import type="android.content.Context" />
+
         <variable
             name="owner"
             type="androidx.lifecycle.LifecycleOwner" />

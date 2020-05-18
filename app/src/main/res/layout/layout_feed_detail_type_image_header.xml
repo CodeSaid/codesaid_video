@@ -22,7 +22,7 @@
             layout="@layout/layout_feed_detail_author_info"
             app:feed="@{feed}"
             app:fullscreen="@{false}"
-            app:leftMargin="@{PixUtils.dp2px(16)}" />
+            app:leftMargin="@{PixUtils.dp2pix(16)}" />
 
         <View
             android:layout_width="match_parent"
