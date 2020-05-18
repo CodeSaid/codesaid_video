@@ -1,6 +1,7 @@
 package com.codesaid.model;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-public class Comment implements Serializable {
+public class Comment extends BaseObservable implements Serializable {
     /**
      * id : 784
      * itemId : 6739143063064549000
@@ -46,6 +47,13 @@ public class Comment implements Serializable {
     public boolean hasLiked;
     public User author;
     public Ugc ugc;
+
+    public Ugc getUgc() {
+        if (ugc == null) {
+            ugc = new Ugc();
+        }
+        return ugc;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

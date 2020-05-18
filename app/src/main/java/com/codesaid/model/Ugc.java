@@ -58,12 +58,14 @@ public class Ugc extends BaseObservable implements Serializable {
         this.commentCount = commentCount;
     }
 
+    @Bindable
     public boolean isHasFavorite() {
         return hasFavorite;
     }
 
     public void setHasFavorite(boolean hasFavorite) {
         this.hasFavorite = hasFavorite;
+        notifyPropertyChanged(BR._all);
     }
 
     @Bindable

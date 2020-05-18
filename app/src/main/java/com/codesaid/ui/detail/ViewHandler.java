@@ -42,8 +42,10 @@ public abstract class ViewHandler {
 
     @CallSuper
     public void bindInitData(Feed feed) {
-        mFeed = feed;
 
+        mInateractionBinding.setOwner(mActivity);
+
+        mFeed = feed;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity,
                 LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setItemAnimator(null);

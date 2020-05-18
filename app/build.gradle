@@ -37,4 +37,5 @@ dependencies {
 
     // QQ 快捷登录
     implementation files('libs/open_sdk_r6140_lite.jar')
+    implementation 'org.jetbrains:annotations:15.0'
 }

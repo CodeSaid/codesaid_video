@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codesaid.databinding.LayoutFeedTypeImageBinding;
 import com.codesaid.databinding.LayoutFeedTypeVideoBinding;
 import com.codesaid.model.Feed;
+import com.codesaid.ui.detail.FeedDetailActivity;
 import com.codesaid.view.ListPlayerView;
 
 /**
@@ -70,6 +71,13 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bindData(getItem(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedDetailActivity.startActivity(mContext, getItem(position), mCategory);
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

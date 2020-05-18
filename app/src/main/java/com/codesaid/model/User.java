@@ -3,6 +3,10 @@ package com.codesaid.model;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.codesaid.BR;
 
 import java.io.Serializable;
 
@@ -12,7 +16,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-public class User implements Serializable {
+public class User extends BaseObservable implements Serializable {
 
     /**
      * id : 962
@@ -180,14 +184,6 @@ public class User implements Serializable {
         this.feedCount = feedCount;
     }
 
-    public boolean isHasFollow() {
-        return hasFollow;
-    }
-
-    public void setHasFollow(boolean hasFollow) {
-        this.hasFollow = hasFollow;
-    }
-
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == null || !(obj instanceof Feed))
@@ -208,5 +204,15 @@ public class User implements Serializable {
                 && favoriteCount == newUser.favoriteCount
                 && feedCount == newUser.feedCount
                 && hasFollow == newUser.hasFollow;
+    }
+
+    @Bindable
+    public boolean isHasFollow() {
+        return hasFollow;
+    }
+
+    public void setHasFollow(boolean hasLiked) {
+        this.hasFollow = hasLiked;
+        notifyPropertyChanged(BR._all);
     }
 }

@@ -55,6 +55,14 @@ public class Feed extends BaseObservable implements Serializable {
     public Ugc ugc;
 
     @Bindable
+    public User getAuthor() {
+        if (author == null) {
+            author = new User();
+        }
+        return author;
+    }
+
+    @Bindable
     public Ugc getUgc() {
         if (ugc == null) {
             ugc = new Ugc();

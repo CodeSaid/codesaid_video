@@ -19,6 +19,12 @@
 
         <import type="com.codesaid.lib_base.util.TimeUtils" />
 
+        <import type="com.codesaid.ui.InteractionPresenter" />
+
+        <variable
+            name="owner"
+            type="androidx.lifecycle.LifecycleOwner" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -103,6 +103,7 @@
             android:drawablePadding="@dimen/dp_3"
             android:gravity="center_vertical"
             android:includeFontPadding="false"
+            android:onClick="@{()->InteractionPresenter.toggleCommentLike(owner,comment)}"
             android:text="@{String.valueOf(comment.ugc.likeCount)}"
             android:textColor="@{comment.ugc.hasLiked?@color/color_theme:@color/color_999}"
             android:textSize="@dimen/sp_10"
