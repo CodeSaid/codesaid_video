@@ -13,6 +13,10 @@
 
         <import type="android.view.View" />
 
+        <import type="com.codesaid.ui.login.UserManager" />
+
+        <import type="com.codesaid.ui.InteractionPresenter" />
+
         <import type="com.codesaid.lib_base.util.TimeUtils" />
 
         <variable
@@ -51,7 +55,7 @@
             android:textSize="@dimen/sp_12"
             app:layout_constraintLeft_toRightOf="@+id/author_avatar"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="神秘的CodeSaid" />
+            tools:text="CodeSaid" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/label_author"
