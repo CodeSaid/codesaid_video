@@ -8,13 +8,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.codesaid.databinding.LayoutFeedTypeImageBinding;
 import com.codesaid.databinding.LayoutFeedTypeVideoBinding;
+import com.codesaid.lib_base.extention.LiveDataBus;
 import com.codesaid.model.Feed;
+import com.codesaid.ui.InteractionPresenter;
 import com.codesaid.ui.detail.FeedDetailActivity;
 import com.codesaid.view.ListPlayerView;
 
@@ -70,14 +73,45 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bindData(getItem(position));
+
+        final Feed feed = getItem(position);
+
+        holder.bindData(feed);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FeedDetailActivity.startActivity(mContext, getItem(position), mCategory);
+                if (mFeedObserver == null) {
+                    mFeedObserver = new FeedObserver();
+                    LiveDataBus.getInstance().with(InteractionPresenter.DATA_FROM_INTERACTION)
+                            .observe((LifecycleOwner) mContext, mFeedObserver);
+                }
+                mFeedObserver.setFeed(feed);
             }
         });
+    }
+
+    private FeedObserver mFeedObserver;
+
+    private class FeedObserver implements Observer<Feed> {
+
+        private Feed mFeed;
+
+        @Override
+        public void onChanged(Feed newFeed) {
+            if (mFeed.id != newFeed.id) {
+                return;
+            }
+            mFeed.author = newFeed.author;
+            mFeed.ugc = newFeed.ugc;
+            mFeed.notifyChange();
+        }
+
+        public void setFeed(Feed feed) {
+
+            mFeed = feed;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

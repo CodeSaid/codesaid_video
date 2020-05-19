@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.alibaba.fastjson.JSONObject;
+import com.codesaid.lib_base.extention.LiveDataBus;
 import com.codesaid.lib_base.global.AppGlobals;
 import com.codesaid.lib_network.ApiResponse;
 import com.codesaid.lib_network.ApiService;
@@ -63,7 +64,15 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasLiked = response.body.getBoolean("hasLiked").booleanValue();
                             feed.getUgc().setHasdiss(hasLiked);
+                            LiveDataBus.getInstance().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
                         }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        super.onError(response);
+                        showToast(response.message);
                     }
                 });
     }
@@ -154,9 +163,8 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasFavorite = response.body.getBooleanValue("hasFavorite");
                             feed.getUgc().setHasFavorite(hasFavorite);
-                            if (hasFavorite) {
-
-                            }
+                            LiveDataBus.getInstance().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
                         }
                     }
 
@@ -196,6 +204,8 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasLiked = response.body.getBooleanValue("hasLiked");
                             feed.getAuthor().setHasFollow(hasLiked);
+                            LiveDataBus.getInstance().with(DATA_FROM_INTERACTION)
+                                    .postValue(feed);
                         }
                     }
 
