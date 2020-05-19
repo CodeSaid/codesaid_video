@@ -42,21 +42,15 @@ public class InteractionPresenter {
     private static final String URL_TOGGLE_COMMENT_LIKE = "/ugc/toggleCommentLike";
 
     public static void toggleFeedLike(LifecycleOwner owner, Feed feed) {
-
-        if (!UserManager.getInstance().isLogin()) {
-            LiveData<User> loginLiveData = UserManager.getInstance().login(AppGlobals.getApplication());
-            loginLiveData.observe(owner, new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    if (user != null) {
-                        toggleFeedLikeInternal(feed);
-                    }
-                    loginLiveData.removeObserver(this);
-                }
-            });
-            return;
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFeedLikeInternal(feed);
+            }
+        })) {
+        } else {
+            toggleFeedLikeInternal(feed);
         }
-        toggleFeedLikeInternal(feed);
     }
 
     private static void toggleFeedLikeInternal(Feed feed) {
@@ -75,20 +69,15 @@ public class InteractionPresenter {
     }
 
     public static void toggleFeedDiss(LifecycleOwner owner, Feed feed) {
-        if (!UserManager.getInstance().isLogin()) {
-            LiveData<User> loginLiveData = UserManager.getInstance().login(AppGlobals.getApplication());
-            loginLiveData.observe(owner, new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    if (user != null) {
-                        toggleFeedDissInternal(feed);
-                    }
-                    loginLiveData.removeObserver(this);
-                }
-            });
-            return;
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFeedDissInternal(feed);
+            }
+        })) {
+        } else {
+            toggleFeedDissInternal(feed);
         }
-        toggleFeedDissInternal(feed);
     }
 
     private static void toggleFeedDissInternal(Feed feed) {
@@ -144,15 +133,12 @@ public class InteractionPresenter {
     }
 
     public static void toggleFeedFavorite(LifecycleOwner owner, Feed feed) {
-        if (!UserManager.getInstance().isLogin()) {
-            UserManager.getInstance().login(AppGlobals.getApplication()).observe(owner, new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    if (user != null) {
-                        toggleFeedFavorite(feed);
-                    }
-                }
-            });
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFeedFavorite(feed);
+            }
+        })) {
         } else {
             toggleFeedFavorite(feed);
         }
@@ -188,15 +174,13 @@ public class InteractionPresenter {
      * @param feed
      */
     public static void toggleFollowUser(LifecycleOwner owner, Feed feed) {
-        if (!UserManager.getInstance().isLogin()) {
-            UserManager.getInstance().login(AppGlobals.getApplication()).observe(owner, new Observer<User>() {
-                @Override
-                public void onChanged(User user) {
-                    if (user != null) {
-                        toggleFollowUser(feed);
-                    }
-                }
-            });
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleFollowUser(feed);
+
+            }
+        })) {
         } else {
             toggleFollowUser(feed);
         }
