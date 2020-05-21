@@ -1,11 +1,14 @@
 package com.codesaid.ui.detail;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import com.codesaid.databinding.LayoutFeedDetailBottomInateractionBinding;
 import com.codesaid.lib_base.view.EmptyView;
 import com.codesaid.model.Comment;
 import com.codesaid.model.Feed;
+import com.codesaid.ui.MutableItemKeyDataSource;
 
 /**
  * Created By codesaid
@@ -32,6 +36,7 @@ public abstract class ViewHandler {
     private final FeedDetailViewModel mViewModel;
 
     private EmptyView mEmptyView;
+    private CommentDialog mCommentDialog;
 
     public ViewHandler(FragmentActivity activity) {
 
@@ -49,7 +54,7 @@ public abstract class ViewHandler {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity,
                 LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setItemAnimator(null);
-        mAdapter = new FeedCommentAdapter();
+        mAdapter = new FeedCommentAdapter(mActivity);
         mRecyclerView.setAdapter(mAdapter);
 
         mViewModel.setItemId(mFeed.itemId);
@@ -58,6 +63,34 @@ public abstract class ViewHandler {
             public void onChanged(PagedList<Comment> comments) {
                 mAdapter.submitList(comments);
                 handleEmpty(comments.size() > 0);
+            }
+        });
+
+        mInateractionBinding.inputView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCommentDialog == null) {
+                    mCommentDialog = CommentDialog.newInstance(mFeed.itemId);
+                }
+                mCommentDialog.setCommentAddListener(new CommentDialog.CommentAddListener() {
+                    @Override
+                    public void onAddComment(Comment comment) {
+                        MutableItemKeyDataSource<Integer, Comment> mutableItemKeyDataSource =
+                                new MutableItemKeyDataSource<Integer, Comment>((ItemKeyedDataSource) mViewModel.getDataSource()) {
+                                    @NonNull
+                                    @Override
+                                    public Integer getKey(@NonNull Comment item) {
+                                        return item.id;
+                                    }
+                                };
+                        mutableItemKeyDataSource.data.add(comment);
+                        mutableItemKeyDataSource.data.addAll(mAdapter.getCurrentList());
+                        PagedList<Comment> comments = mutableItemKeyDataSource.buildNewPagedList(mAdapter.getCurrentList().getConfig());
+                        mAdapter.submitList(comments);
+                    }
+                });
+
+                mCommentDialog.show(mActivity.getSupportFragmentManager(), "comment_dialog");
             }
         });
     }

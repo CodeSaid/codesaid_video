@@ -1,11 +1,16 @@
 package com.codesaid.ui.detail;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.paging.ItemKeyedDataSource;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +18,8 @@ import com.codesaid.databinding.LayoutFeedCommentListItemBinding;
 import com.codesaid.lib_base.extention.AbsPagedListAdapter;
 import com.codesaid.lib_base.util.PixUtils;
 import com.codesaid.model.Comment;
+import com.codesaid.ui.InteractionPresenter;
+import com.codesaid.ui.MutableItemKeyDataSource;
 import com.codesaid.ui.login.UserManager;
 
 /**
@@ -24,7 +31,10 @@ import com.codesaid.ui.login.UserManager;
 public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedCommentAdapter.ViewHolder> {
 
 
-    protected FeedCommentAdapter() {
+    private Context mContext;
+    private LayoutInflater mInflater;
+
+    protected FeedCommentAdapter(Context context) {
         super(new DiffUtil.ItemCallback<Comment>() {
             @Override
             public boolean areItemsTheSame(@NonNull Comment oldItem, @NonNull Comment newItem) {
@@ -36,6 +46,8 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
                 return oldItem.equals(newItem);
             }
         });
+        mContext = context;
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -47,7 +59,7 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
     protected ViewHolder onCreateViewHolder2(ViewGroup parent, int viewType) {
         LayoutFeedCommentListItemBinding binding =
                 LayoutFeedCommentListItemBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false);
+                        mInflater, parent, false);
 
         return new ViewHolder(binding.getRoot(), binding);
     }
@@ -56,6 +68,36 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
     protected void onBindViewHolder2(ViewHolder holder, int position) {
         Comment item = getItem(position);
         holder.bindData(item);
+        holder.mBinding.commentDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InteractionPresenter.deleteFeedComment(mContext, item.itemId, item.commentId)
+                        .observe((LifecycleOwner) mContext, new Observer<Boolean>() {
+                            @Override
+                            public void onChanged(Boolean success) {
+                                if (success) {
+                                    MutableItemKeyDataSource<Integer, Comment> dataSource =
+                                            new MutableItemKeyDataSource<Integer, Comment>((ItemKeyedDataSource) getCurrentList().getDataSource()) {
+                                                @NonNull
+                                                @Override
+                                                public Integer getKey(@NonNull Comment item) {
+                                                    return item.id;
+                                                }
+
+                                            };
+                                    PagedList<Comment> currentList = getCurrentList();
+                                    for (Comment comment : currentList) {
+                                        if (comment != getItem(position)) {
+                                            dataSource.data.add(comment);
+                                        }
+                                    }
+                                    PagedList<Comment> pagedList = dataSource.buildNewPagedList(getCurrentList().getConfig());
+                                    submitList(pagedList);
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

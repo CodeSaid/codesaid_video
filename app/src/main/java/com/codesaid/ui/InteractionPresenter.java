@@ -1,13 +1,16 @@
 package com.codesaid.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.arch.core.executor.ArchTaskExecutor;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.alibaba.fastjson.JSONObject;
@@ -41,6 +44,8 @@ public class InteractionPresenter {
     private static final String URL_SHARE = "/ugc/increaseShareCount";
 
     private static final String URL_TOGGLE_COMMENT_LIKE = "/ugc/toggleCommentLike";
+
+    private static final String URL_COMMENT_DELETE_COMMENT = "/comment/deleteComment";
 
     public static void toggleFeedLike(LifecycleOwner owner, Feed feed) {
         if (!isLogin(owner, new Observer<User>() {
@@ -241,6 +246,52 @@ public class InteractionPresenter {
                         if (response.body != null) {
                             boolean hasLiked = response.body.getBooleanValue("hasLiked");
                             comment.getUgc().setHasLiked(hasLiked);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
+    }
+
+    public static LiveData<Boolean> deleteFeedComment(Context context, long itemId, long commentId) {
+
+        MutableLiveData<Boolean> liveData = new MutableLiveData<>();
+
+        new AlertDialog.Builder(context)
+                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        deleteFeedComment(liveData, itemId, commentId);
+                    }
+                }).setMessage("是否确认删除?")
+                .create()
+                .show();
+
+        return liveData;
+    }
+
+    private static void deleteFeedComment(LiveData liveData, long itemId, long commentId) {
+        ApiService.get(URL_COMMENT_DELETE_COMMENT)
+                .addParam("userId", UserManager.getInstance().getUserId())
+                .addParam("commentId", commentId)
+                .addParam("itemId", itemId)
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            boolean result = response.body.getBooleanValue("result");
+                            ((MutableLiveData) liveData).postValue(result);
+                            showToast("评论删除成功");
                         }
                     }
 
