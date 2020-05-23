@@ -43,7 +43,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.publish.CaptureActivity" />
+
+        <activity
+            android:name=".ui.publish.CaptureActivity"
+            android:theme="@style/capture" />
 
 
         <!-- 注册SDKActivity -->
@@ -69,6 +72,7 @@
         <activity
             android:name=".ui.detail.FeedDetailActivity"
             android:theme="@style/feedDetail" />
+        <activity android:name=".ui.publish.PreviewActivity" />
 
     </application>
 
