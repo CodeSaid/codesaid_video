@@ -90,4 +90,7 @@ dependencies {
 
     //gesture imageview
     api 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    //aliyun oss
+    api 'com.aliyun.dpa:oss-android-sdk:+'
 }
