@@ -49,7 +49,6 @@ public class PageListPlay {
      * 销毁
      */
     public void release() {
-
         if (mExoPlayer != null) {
             mExoPlayer.setPlayWhenReady(false);
             mExoPlayer.stop(true);
@@ -66,6 +65,15 @@ public class PageListPlay {
             mPlayerControlView.setPlayer(null);
             mPlayerControlView.setVisibilityListener(null);
             mPlayerControlView = null;
+        }
+    }
+
+    public void switchPlayerView(PlayerView playerView) {
+        if (playerView != null && playerView != this.mPlayerView) {
+            this.mPlayerView.setPlayer(null);
+            playerView.setPlayer(this.mExoPlayer);
+        } else {
+            this.mPlayerView.setPlayer(this.mExoPlayer);
         }
     }
 }
