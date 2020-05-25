@@ -2,6 +2,7 @@ package com.codesaid.ui.publish;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -79,6 +80,13 @@ public class CaptureActivity extends AppCompatActivity {
     public static final String RESULT_FILE_WIDTH = "file_width";
     public static final String RESULT_FILE_HEIGHT = "file_height";
     public static final String RESULT_FILE_TYPE = "file_type";
+
+    public static final int REQUEST_CODE = 1000;
+
+    public static void startActivity(Activity activity) {
+        Intent intent = new Intent(activity, CaptureActivity.class);
+        activity.startActivityForResult(intent, REQUEST_CODE);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

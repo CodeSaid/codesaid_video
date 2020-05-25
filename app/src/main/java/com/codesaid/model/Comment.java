@@ -12,6 +12,9 @@ import java.io.Serializable;
  * desc:
  */
 public class Comment extends BaseObservable implements Serializable {
+
+    public static final int COMMENT_TYPE_VIDEO = 3;
+    public static final int COMMENT_TYPE_IMAGE = 2;
     /**
      * id : 784
      * itemId : 6739143063064549000

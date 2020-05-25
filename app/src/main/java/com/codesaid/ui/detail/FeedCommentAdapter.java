@@ -1,5 +1,6 @@
 package com.codesaid.ui.detail;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.codesaid.model.Comment;
 import com.codesaid.ui.InteractionPresenter;
 import com.codesaid.ui.MutableItemKeyDataSource;
 import com.codesaid.ui.login.UserManager;
+import com.codesaid.ui.publish.PreviewActivity;
 
 /**
  * Created By codesaid
@@ -96,6 +98,15 @@ public class FeedCommentAdapter extends AbsPagedListAdapter<Comment, FeedComment
                                 }
                             }
                         });
+            }
+        });
+
+        holder.mBinding.commentCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isVideo = item.commentType == Comment.COMMENT_TYPE_VIDEO;
+                PreviewActivity.startActivity((Activity) mContext,
+                        isVideo ? item.videoUrl : item.imageUrl, isVideo, null);
             }
         });
     }

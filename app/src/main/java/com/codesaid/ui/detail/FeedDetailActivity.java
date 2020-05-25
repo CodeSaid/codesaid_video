@@ -20,6 +20,8 @@ public class FeedDetailActivity extends AppCompatActivity {
     private static final String KEY_FEED = "key_feed";
     private static final String KEY_CATEGORY = "key_category";
 
+    ViewHandler viewHandler = null;
+
     public static void startActivity(Context context, Feed item, String category) {
         Intent intent = new Intent(context, FeedDetailActivity.class);
         intent.putExtra(KEY_FEED, item);
@@ -37,7 +39,6 @@ public class FeedDetailActivity extends AppCompatActivity {
             return;
         }
 
-        ViewHandler viewHandler = null;
         if (feed.itemType == Feed.TYPE_IMAGE) { // 图文
             viewHandler = new ImageViewHandler(this);
         } else if (feed.itemType == Feed.TYPE_VIDEO) { // 视频
@@ -45,5 +46,13 @@ public class FeedDetailActivity extends AppCompatActivity {
         }
 
         viewHandler.bindInitData(feed);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (viewHandler != null) {
+            viewHandler.onActivityResult(requestCode,resultCode,data);
+        }
     }
 }
