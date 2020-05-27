@@ -39,4 +39,13 @@
         <item name="android:elevation">0dp</item>
     </style>
 
+    <declare-styleable name="view_anchor_behavior">
+        <attr name="anchorId" format="integer"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="view_zoom_behavior">
+        <attr name="min_height" format="dimension"></attr>
+        <attr name="scrolling_id" format="integer"></attr>
+    </declare-styleable>
+
 </resources>
