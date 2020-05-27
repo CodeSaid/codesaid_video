@@ -73,6 +73,33 @@ public class FullScreenPlayerView extends ListPlayerView {
     }
 
     @Override
+    public void setLayoutParams(ViewGroup.LayoutParams params) {
+        if (mHeightPx > mWidthPx) {
+            int layoutHeight = params.height;
+            int layoutWidth = params.width;
+            ViewGroup.LayoutParams coverLayoutParams = cover.getLayoutParams();
+            coverLayoutParams.width = (int) (mWidthPx / (mHeightPx * 1.0f / layoutHeight));
+            coverLayoutParams.height = layoutHeight;
+
+            cover.setLayoutParams(coverLayoutParams);
+
+            if (mExoPlayerView != null) {
+                ViewGroup.LayoutParams exoLayoutParams = mExoPlayerView.getLayoutParams();
+
+                if (exoLayoutParams != null && exoLayoutParams.width > 0 && exoLayoutParams.height > 0) {
+                    float scaleX = coverLayoutParams.width * 1.0f / exoLayoutParams.width;
+                    float scaleY = coverLayoutParams.height * 1.0f / exoLayoutParams.height;
+
+                    mExoPlayerView.setScaleX(scaleX);
+                    mExoPlayerView.setScaleY(scaleY);
+                }
+
+            }
+        }
+        super.setLayoutParams(params);
+    }
+
+    @Override
     public void onActive() {
         //视频播放,或恢复播放
 

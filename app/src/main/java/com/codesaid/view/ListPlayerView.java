@@ -267,4 +267,9 @@ public class ListPlayerView extends FrameLayout implements IPlayerListener, Play
         isPlaying = playbackState == Player.STATE_READY && exoPlayer.getBufferedPosition() != 0 && playWhenReady;
         playBtn.setImageResource(isPlaying ? R.drawable.icon_video_pause : R.drawable.icon_video_play);
     }
+
+    public View getPlayController() {
+        PageListPlay listPlay = PageListPlayManager.get(mCategory);
+        return listPlay.mPlayerControlView;
+    }
 }
