@@ -47,8 +47,6 @@ import java.util.ArrayList;
  *
  * @author codesaid
  */
-
-@ActivityDestination(pageUrl = "main/tabs/publish", needLogin = true)
 public class CaptureActivity extends AppCompatActivity {
 
     private ActivityCaptureLayoutBinding mBinding;
