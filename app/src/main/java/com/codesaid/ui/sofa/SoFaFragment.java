@@ -35,7 +35,7 @@ import java.util.List;
 public class SoFaFragment extends Fragment {
 
     private TabLayout mTabLayout;
-    private ViewPager2 mViewPager;
+    protected ViewPager2 mViewPager;
     private FragmentSofaBinding mBinding;
 
     private List<SofaTab.Tabs> mTabs = new ArrayList<>();

@@ -21,6 +21,7 @@ import com.codesaid.lib_network.ApiService;
 import com.codesaid.lib_network.callback.JsonCallback;
 import com.codesaid.model.Comment;
 import com.codesaid.model.Feed;
+import com.codesaid.model.TagList;
 import com.codesaid.model.User;
 import com.codesaid.ui.login.UserManager;
 import com.codesaid.ui.share.ShareDialog;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
  * Package Name: com.codesaid.ui
  * desc:
  */
+@SuppressWarnings("unchecked")
 public class InteractionPresenter {
 
     public static final String DATA_FROM_INTERACTION = "data_from_interaction";
@@ -57,6 +59,38 @@ public class InteractionPresenter {
         } else {
             toggleFeedLikeInternal(feed);
         }
+    }
+
+    public static void toggleTagFollow(LifecycleOwner owner, TagList tagList) {
+        if (!isLogin(owner, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                toggleTagFollow(tagList);
+            }
+        })) {
+        } else {
+            toggleTagFollow(tagList);
+        }
+    }
+
+    private static void toggleTagFollow(TagList tagList) {
+        ApiService.get("/tag/toggleTagFollow")
+                .addParam("tagId",tagList.tagId)
+                .addParam("userId",UserManager.getInstance().getUserId())
+                .execute(new JsonCallback<JSONObject>() {
+                    @Override
+                    public void onSuccess(ApiResponse<JSONObject> response) {
+                        if (response.body != null) {
+                            boolean hasFollow = response.body.getBooleanValue("hasFollow");
+                            tagList.setHasFollow(hasFollow);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ApiResponse<JSONObject> response) {
+                        showToast(response.message);
+                    }
+                });
     }
 
     private static void toggleFeedLikeInternal(Feed feed) {

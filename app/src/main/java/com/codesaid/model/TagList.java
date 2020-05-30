@@ -3,6 +3,10 @@ package com.codesaid.model;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.codesaid.BR;
 
 import java.io.Serializable;
 
@@ -12,7 +16,7 @@ import java.io.Serializable;
  * Package Name: com.codesaid.model
  * desc:
  */
-public class TagList implements Serializable {
+public class TagList extends BaseObservable implements Serializable {
 
     /**
      * id : 8
@@ -57,5 +61,15 @@ public class TagList implements Serializable {
                 && enterNum == newOne.enterNum
                 && followNum == newOne.followNum
                 && hasFollow == newOne.hasFollow;
+    }
+
+    @Bindable
+    public boolean isHasFollow() {
+        return hasFollow;
+    }
+
+    public void setHasFollow(boolean hasFollow) {
+        this.hasFollow = hasFollow;
+        notifyPropertyChanged(com.codesaid.BR._all);
     }
 }
