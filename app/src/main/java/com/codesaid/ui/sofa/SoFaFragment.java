@@ -141,11 +141,11 @@ public class SoFaFragment extends Fragment {
         return textView;
     }
 
-    private Fragment getTabFragment(int position) {
+    public Fragment getTabFragment(int position) {
         return HomeFragment.newInstance(mTabs.get(position).tag);
     }
 
-    private SofaTab getTabConfig() {
+    public SofaTab getTabConfig() {
         return AppConfig.getSofaTab();
     }
 

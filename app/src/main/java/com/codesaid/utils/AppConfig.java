@@ -34,6 +34,8 @@ public class AppConfig {
 
     private static SofaTab sSofaTab;
 
+    private static SofaTab sFindTab;
+
     public static HashMap<String, Destination> getDestConfig() {
         if (sDesConfig == null) {
             String content = parseFile("destination.json");
@@ -65,6 +67,21 @@ public class AppConfig {
             });
         }
         return sSofaTab;
+    }
+
+    public static SofaTab getFindTab() {
+        if (sFindTab == null) {
+            String content = parseFile("find_tabs_config.json");
+            sFindTab = JSON.parseObject(content, SofaTab.class);
+            Collections.sort(sFindTab.tabs, new Comparator<SofaTab.Tabs>() {
+                @Override
+                public int compare(SofaTab.Tabs o1, SofaTab.Tabs o2) {
+                    return o1.index < o2.index ? -1 : 1;
+                }
+            });
+        }
+
+        return sFindTab;
     }
 
     /**
