@@ -61,7 +61,7 @@ public class FeedAdapter extends PagedListAdapter<Feed, FeedAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ViewDataBinding binding = null;
-        if (viewType == Feed.TYPE_IMAGE) {
+        if (viewType == Feed.TYPE_IMAGE_TEXT) {
 
             binding = LayoutFeedTypeImageBinding.inflate(mInflater);
         } else {
