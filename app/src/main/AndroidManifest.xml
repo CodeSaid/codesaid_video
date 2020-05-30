@@ -74,6 +74,7 @@
             android:theme="@style/feedDetail" />
         <activity android:name=".ui.publish.PreviewActivity" />
         <activity android:name=".ui.publish.PublishActivity" />
+        <activity android:name=".ui.find.TagFeedListActivity" />
 
     </application>
 

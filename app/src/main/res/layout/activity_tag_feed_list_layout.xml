@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="tagList"
+            type="com.codesaid.model.TagList" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <include layout="@layout/refresh_view_layout" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48">
+
+            <ImageView
+                android:id="@+id/action_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:src="@drawable/icon_back_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.codesaid.view.PPImageView
+                android:id="@+id/tag_logo"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_10"
+                app:image_url="@{tagList.icon}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/action_close"
+                app:layout_constraintTop_toTopOf="parent"
+                app:radius="@{8}"
+                tools:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:text="@{tagList.title}"
+                android:textColor="@color/color_000"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tag_logo"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="hai zei wang" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="@dimen/dp_60"
+                android:layout_height="28dp"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:backgroundTint="@color/color_theme"
+                android:text="@{tagList.hasFollow?@string/tag_follow:@string/tag_unfollow}"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/sp_14"
+                app:cornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tag_title"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="以关注" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/color_gray2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>
