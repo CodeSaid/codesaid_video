@@ -33,8 +33,9 @@ public class Feed extends BaseObservable implements Serializable {
      * cover : https://p3-dy.byteimg.com/img/mosaic-legacy/2d676000e36289f35f70c~640x368_q80.webp
      */
 
-    public static final int TYPE_IMAGE = 1;
-    public static final int TYPE_VIDEO = 2;
+
+    public static final int TYPE_IMAGE_TEXT = 1;//图文
+    public static final int TYPE_VIDEO = 2;//视频
 
     public int id;
     public long itemId;

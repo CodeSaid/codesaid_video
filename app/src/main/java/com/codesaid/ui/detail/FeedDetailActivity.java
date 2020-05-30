@@ -33,13 +33,13 @@ public class FeedDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Feed feed = getIntent().getParcelableExtra(KEY_FEED);
+        Feed feed = (Feed) getIntent().getSerializableExtra(KEY_FEED);
         if (feed == null) {
             finish();
             return;
         }
 
-        if (feed.itemType == Feed.TYPE_IMAGE) { // 图文
+        if (feed.itemType == Feed.TYPE_IMAGE_TEXT) { // 图文
             viewHandler = new ImageViewHandler(this);
         } else if (feed.itemType == Feed.TYPE_VIDEO) { // 视频
             viewHandler = new VideoViewHandler(this);
