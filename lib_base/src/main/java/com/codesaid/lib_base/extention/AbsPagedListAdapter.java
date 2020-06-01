@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
  * 解决了添加HeaderView和FooterView时 RecyclerView定位不准确的问题
  */
 public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder> extends PagedListAdapter<T, VH> {
-
     private SparseArray<View> mHeaders = new SparseArray<>();
-    private SparseArray<View> mFooter = new SparseArray<>();
+    private SparseArray<View> mFooters = new SparseArray<>();
 
     private int BASE_ITEM_TYPE_HEADER = 100000;
     private int BASE_ITEM_TYPE_FOOTER = 200000;
+
 
     protected AbsPagedListAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
         super(diffCallback);
@@ -39,74 +39,72 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void addFooterView(View view) {
         //判断给View对象是否还没有处在mFooters数组里面
-        if (mFooter.indexOfValue(view) < 0) {
-            mFooter.put(BASE_ITEM_TYPE_FOOTER++, view);
+        if (mFooters.indexOfValue(view) < 0) {
+            mFooters.put(BASE_ITEM_TYPE_FOOTER++, view);
             notifyDataSetChanged();
         }
+    }
+
+    // 移除头部
+    public void removeHeaderView(View view) {
+        int index = mHeaders.indexOfValue(view);
+        if (index < 0) return;
+        mHeaders.removeAt(index);
+        notifyDataSetChanged();
+    }
+
+    // 移除底部
+    public void removeFooterView(View view) {
+        int index = mFooters.indexOfValue(view);
+        if (index < 0) return;
+        mFooters.removeAt(index);
+        notifyDataSetChanged();
+    }
+
+    public int getHeaderCount() {
+        return mHeaders.size();
+    }
+
+    public int getFooterCount() {
+        return mFooters.size();
     }
 
     @Override
     public int getItemCount() {
         int itemCount = super.getItemCount();
-        return itemCount + mHeaders.size() + mFooter.size();
+        return itemCount + mHeaders.size() + mFooters.size();
     }
 
-    /**
-     * 获取列表中 除 header 和footer 以外 item 的数目
-     */
-    public int getRealItemCount() {
-        return getItemCount() - mHeaders.size() - mFooter.size();
+    public int getOriginalItemCount() {
+        return getItemCount() - mHeaders.size() - mFooters.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         if (isHeaderPosition(position)) {
-            //返回该position对应的 headerView 的  viewType
+            //返回该position对应的headerview的  viewType
             return mHeaders.keyAt(position);
         }
 
         if (isFooterPosition(position)) {
-            position = position - getRealItemCount() - mHeaders.size();
-            return mFooter.keyAt(position);
+            //footer类型的，需要计算一下它的position实际大小
+            position = position - getOriginalItemCount() - mHeaders.size();
+            return mFooters.keyAt(position);
         }
-
         position = position - mHeaders.size();
-
         return getItemViewType2(position);
     }
 
-    protected abstract int getItemViewType2(int position);
+    protected int getItemViewType2(int position) {
+        return 0;
+    }
 
     private boolean isFooterPosition(int position) {
-        return position > getRealItemCount() + mHeaders.size();
+        return position >= getOriginalItemCount() + mHeaders.size();
     }
 
     private boolean isHeaderPosition(int position) {
         return position < mHeaders.size();
-    }
-
-    /**
-     * 移除头部
-     */
-    public void removeHeaderView(View view) {
-        int index = mHeaders.indexOfValue(view);
-        if (index < 0) {
-            return;
-        }
-        mHeaders.removeAt(index);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 移除 底部
-     */
-    public void removeFooterView(View view) {
-        int index = mFooter.indexOfValue(view);
-        if (index < 0) {
-            return;
-        }
-        mFooter.removeAt(index);
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -118,11 +116,13 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
             };
         }
 
-        if (mFooter.indexOfKey(viewType) >= 0) {
-            View view = mFooter.get(viewType);
+        if (mFooters.indexOfKey(viewType) >= 0) {
+            View view = mFooters.get(viewType);
             return (VH) new RecyclerView.ViewHolder(view) {
             };
         }
+
+
         return onCreateViewHolder2(parent, viewType);
     }
 
@@ -130,9 +130,8 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        if (isHeaderPosition(position) || isFooterPosition(position)) {
+        if (isHeaderPosition(position) || isFooterPosition(position))
             return;
-        }
         //列表中正常类型的itemView的 position 咱们需要减去添加headerView的个数
         position = position - mHeaders.size();
         onBindViewHolder2(holder, position);
@@ -141,52 +140,67 @@ public abstract class AbsPagedListAdapter<T, VH extends RecyclerView.ViewHolder>
     protected abstract void onBindViewHolder2(VH holder, int position);
 
     @Override
-    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
-        super.registerAdapterDataObserver(new AdapterDataObserver(observer));
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderPosition(holder.getAdapterPosition()) && !isFooterPosition(holder.getAdapterPosition())) {
+            this.onViewAttachedToWindow2((VH) holder);
+        }
     }
 
-    /**
-     * 如果我们先添加了headerView,而后网络数据回来了再更新到列表上
-     * 由于Paging在计算列表上item的位置时 并不会顾及我们有没有添加headerView，就会出现列表定位的问题
-     * 实际上 RecyclerView#setAdapter方法，它会给Adapter注册了一个AdapterDataObserver
-     * 咱么可以代理registerAdapterDataObserver()传递进来的observer。在各个方法的实现中，把headerView的个数算上，再中转出去即可
-     */
-    private class AdapterDataObserver extends RecyclerView.AdapterDataObserver {
+    public void onViewAttachedToWindow2(VH holder) {
 
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderPosition(holder.getAdapterPosition()) && !isFooterPosition(holder.getAdapterPosition())) {
+            this.onViewDetachedFromWindow2((VH) holder);
+        }
+    }
+
+    public void onViewDetachedFromWindow2(VH holder) {
+
+    }
+
+    @Override
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(new AdapterDataObserverProxy(observer));
+    }
+
+    //如果我们先添加了headerView,而后网络数据回来了再更新到列表上
+    //由于Paging在计算列表上item的位置时 并不会顾及我们有没有添加headerView，就会出现列表定位的问题
+    //实际上 RecyclerView#setAdapter方法，它会给Adapter注册了一个AdapterDataObserver
+    //咱么可以代理registerAdapterDataObserver()传递进来的observer。在各个方法的实现中，把headerView的个数算上，再中转出去即可
+    private class AdapterDataObserverProxy extends RecyclerView.AdapterDataObserver {
         private RecyclerView.AdapterDataObserver mObserver;
 
-        public AdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+        public AdapterDataObserverProxy(RecyclerView.AdapterDataObserver observer) {
             mObserver = observer;
         }
 
-        @Override
         public void onChanged() {
             mObserver.onChanged();
         }
 
-        @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             mObserver.onItemRangeChanged(positionStart + mHeaders.size(), itemCount);
         }
 
-        @Override
         public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
             mObserver.onItemRangeChanged(positionStart + mHeaders.size(), itemCount, payload);
         }
 
-        @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             mObserver.onItemRangeInserted(positionStart + mHeaders.size(), itemCount);
         }
 
-        @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             mObserver.onItemRangeRemoved(positionStart + mHeaders.size(), itemCount);
         }
 
-        @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
             mObserver.onItemRangeMoved(fromPosition + mHeaders.size(), toPosition + mHeaders.size(), itemCount);
         }
+
+
     }
 }
