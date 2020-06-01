@@ -27,6 +27,8 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     // 进度详情页的时候是否停止播放视频
     private boolean showPause = true;
 
+    private String feedType;
+
     public static HomeFragment newInstance(String feedType) {
         Bundle args = new Bundle();
         args.putString("feedType", feedType);
@@ -48,23 +50,19 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
         mPageDetector = new PageListPlayDetector(this, mRecyclerView);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public PagedListAdapter getAdapter() {
-        String feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
+        feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
         return new FeedAdapter(getContext(), feedType) {
             @Override
-            public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-                super.onViewAttachedToWindow(holder);
+            public void onViewAttachedToWindow2(@NonNull ViewHolder holder) {
                 if (holder.isVideoItem()) {
                     mPageDetector.addListener(holder.getListPlayerView());
                 }
-
             }
 
             @Override
-            public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-                super.onViewDetachedFromWindow(holder);
+            public void onViewDetachedFromWindow2(@NonNull ViewHolder holder) {
                 mPageDetector.removeListener(holder.getListPlayerView());
             }
 
@@ -76,8 +74,8 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
             @Override
             public void onCurrentListChanged(@Nullable PagedList<Feed> previousList, @Nullable PagedList<Feed> currentList) {
-                // 没提交一次 pageList 对象 到 adapter 就会触发
-                // 即每一次调用 adapter.submitlist 就会触发
+                //这个方法是在我们每提交一次 pagelist对象到adapter 就会触发一次
+                //每调用一次 adpater.submitlist
                 if (previousList != null && currentList != null) {
                     if (!currentList.containsAll(previousList)) {
                         mRecyclerView.scrollToPosition(0);
