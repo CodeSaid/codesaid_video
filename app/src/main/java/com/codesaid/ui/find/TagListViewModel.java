@@ -49,7 +49,17 @@ public class TagListViewModel extends AbsViewModel<TagList> {
 
         @Override
         public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<TagList> callback) {
-            loadData(params.requestedInitialKey, callback);
+            loadData(0L, callback);
+        }
+
+        @Override
+        public void loadAfter(@NonNull LoadParams<Long> params, @NonNull LoadCallback<TagList> callback) {
+            loadData(params.key, callback);
+        }
+
+        @Override
+        public void loadBefore(@NonNull LoadParams<Long> params, @NonNull LoadCallback<TagList> callback) {
+            callback.onResult(Collections.emptyList());
         }
 
         @SuppressWarnings("unchecked")
@@ -80,15 +90,6 @@ public class TagListViewModel extends AbsViewModel<TagList> {
             }
         }
 
-        @Override
-        public void loadAfter(@NonNull LoadParams<Long> params, @NonNull LoadCallback<TagList> callback) {
-            loadData(params.key, callback);
-        }
-
-        @Override
-        public void loadBefore(@NonNull LoadParams<Long> params, @NonNull LoadCallback<TagList> callback) {
-            callback.onResult(Collections.emptyList());
-        }
 
         @NonNull
         @Override

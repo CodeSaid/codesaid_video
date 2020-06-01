@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.paging.ItemKeyedDataSource;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.codesaid.R;
 import com.codesaid.model.TagList;
@@ -26,9 +25,8 @@ import java.util.List;
  * desc:
  */
 public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> {
-
     public static final String KEY_TAG_TYPE = "tag_type";
-    private String mTagType;
+    private String tagType;
 
     public static TagListFragment newInstance(String tagType) {
         Bundle args = new Bundle();
@@ -39,17 +37,9 @@ public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> 
     }
 
     @Override
-    public PagedListAdapter getAdapter() {
-        mTagType = getArguments().getString(KEY_TAG_TYPE);
-        mViewModel.setTagType(mTagType);
-        TagListAdapter tagListAdapter = new TagListAdapter(getContext());
-        return tagListAdapter;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (TextUtils.equals(mTagType, "onlyFollow")) {
+        if (TextUtils.equals(tagType, "onlyFollow")) {
             mEmptyView.setEmptyText(getString(R.string.tag_list_no_follow));
             mEmptyView.setBtn(getString(R.string.tag_list_no_follow_button), new View.OnClickListener() {
                 @Override
@@ -58,6 +48,20 @@ public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> 
                 }
             });
         }
+        mRecyclerView.removeItemDecorationAt(0);
+        mViewModel.setTagType(tagType);
+    }
+
+    @Override
+    public PagedListAdapter getAdapter() {
+        tagType = getArguments().getString(KEY_TAG_TYPE);
+        TagListAdapter tagListAdapter = new TagListAdapter(getContext());
+        return tagListAdapter;
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        mViewModel.getDataSource().invalidate();
     }
 
     @Override
@@ -65,29 +69,26 @@ public class TagListFragment extends AbsListFragment<TagList, TagListViewModel> 
         PagedList<TagList> currentList = getAdapter().getCurrentList();
         long tagId = currentList == null ? 0 : currentList.get(currentList.size() - 1).tagId;
         mViewModel.loadData(tagId, new ItemKeyedDataSource.LoadCallback() {
+
             @Override
             public void onResult(@NonNull List data) {
-                MutableItemKeyDataSource<Long, TagList> mutableItemKeyDataSource =
-                        new MutableItemKeyDataSource<Long, TagList>((ItemKeyedDataSource) mViewModel.getDataSource()) {
-                            @NonNull
-                            @Override
-                            public Long getKey(@NonNull TagList item) {
-                                return item.tagId;
-                            }
-                        };
-
-                mutableItemKeyDataSource.data.addAll(currentList);
-                mutableItemKeyDataSource.data.addAll(data);
-                PagedList<TagList> tagLists = mutableItemKeyDataSource.buildNewPagedList(currentList.getConfig());
-                if (data.size() > 0) {
-                    submitList(tagLists);
+                if (data != null && data.size() > 0) {
+                    MutableItemKeyDataSource<Long, TagList> mutableItemKeyedDataSource =
+                            new MutableItemKeyDataSource<Long, TagList>((ItemKeyedDataSource) mViewModel.getDataSource()) {
+                        @NonNull
+                        @Override
+                        public Long getKey(@NonNull TagList item) {
+                            return item.tagId;
+                        }
+                    };
+                    mutableItemKeyedDataSource.data.addAll(currentList);
+                    mutableItemKeyedDataSource.data.addAll(data);
+                    PagedList<TagList> pagedList = mutableItemKeyedDataSource.buildNewPagedList(currentList.getConfig());
+                    submitList(pagedList);
+                } else {
+                    finishRefresh(false);
                 }
             }
         });
-    }
-
-    @Override
-    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        mViewModel.getDataSource().invalidate();
     }
 }
