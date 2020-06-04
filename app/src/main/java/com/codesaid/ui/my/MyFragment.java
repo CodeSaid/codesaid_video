@@ -39,5 +39,6 @@ public class MyFragment extends Fragment {
         AppCompatImageView actionLogout = mBinding.actionLogout;
         AppCompatImageView goDetail = mBinding.goDetail;
 
+
     }
 }
