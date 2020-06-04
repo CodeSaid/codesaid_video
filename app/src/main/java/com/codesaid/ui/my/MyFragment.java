@@ -7,12 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
+import com.codesaid.R;
 import com.codesaid.databinding.FragmentMyBinding;
 import com.codesaid.lib_navannotation.FragmentDestination;
+import com.codesaid.model.User;
+import com.codesaid.ui.login.UserManager;
 
 /**
  * Created By codesaid
@@ -36,9 +41,26 @@ public class MyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AppCompatImageView actionLogout = mBinding.actionLogout;
-        AppCompatImageView goDetail = mBinding.goDetail;
 
+        User user = UserManager.getInstance().getUser();
+        mBinding.setUser(user);
 
+        UserManager.getInstance().refresh().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    mBinding.setUser(user);
+                }
+            }
+        });
+
+        mBinding.actionLogout.setOnClickListener(v -> new AlertDialog.Builder(getContext())
+                .setMessage(getString(R.string.fragment_my_logout))
+                .setPositiveButton(getString(R.string.fragment_my_logout_ok), (dialog, which) -> {
+                    dialog.dismiss();
+                    UserManager.getInstance().logout();
+                    getActivity().onBackPressed();
+                }).setNegativeButton(getString(R.string.fragment_my_logout_cancel), null)
+                .create().show());
     }
 }
