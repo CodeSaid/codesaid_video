@@ -36,4 +36,24 @@ public class StatusBar {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(Color.TRANSPARENT);
     }
+
+    /**
+     * 6.0及以上的状态栏色调
+     *
+     * @param activity
+     * @param light    true:白底黑字,false:黑底白字
+     */
+    public static void lightStatusBar(Activity activity, boolean light) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return;
+        Window window = activity.getWindow();
+        View decorView = window.getDecorView();
+        int visibility = decorView.getSystemUiVisibility();
+        if (light) {
+            visibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            visibility &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
+        decorView.setSystemUiVisibility(visibility);
+    }
 }
