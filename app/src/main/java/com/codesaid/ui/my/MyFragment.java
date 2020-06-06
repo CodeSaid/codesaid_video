@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 
 import com.codesaid.R;
 import com.codesaid.databinding.FragmentMyBinding;
+import com.codesaid.lib_base.util.StatusBar;
 import com.codesaid.lib_navannotation.FragmentDestination;
 import com.codesaid.model.User;
 import com.codesaid.ui.login.UserManager;
@@ -62,5 +63,17 @@ public class MyFragment extends Fragment {
                     getActivity().onBackPressed();
                 }).setNegativeButton(getString(R.string.fragment_my_logout_cancel), null)
                 .create().show());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        StatusBar.lightStatusBar(getActivity(), false);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        StatusBar.lightStatusBar(getActivity(), hidden);
     }
 }
